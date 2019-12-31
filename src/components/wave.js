@@ -8,7 +8,7 @@ import styled from "styled-components"
 
 const Container = styled.div`
   canvas {
-    width: 100%;
+    width: 50vw;
     height: 100vh;
   }
 `
@@ -25,14 +25,15 @@ const wave = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 const matrix = wave.map(a => wave.map(n => n + a))
 
 function Box({ delay, x, y }) {
-  function createDistance(n) {
-    return (n - wave.length / 2) * 2.1
-  }
-
-  const squareWidth = 2
+  const squareWidth = 1
+  const distanceBetweenSquares = 0.1
 
   const initialHeight = 1
   const heightDistance = 2.5
+
+  function createDistance(n) {
+    return (n - wave.length / 2) * (squareWidth + distanceBetweenSquares)
+  }
 
   const { position } = useSpring({
     from: {
@@ -71,7 +72,7 @@ function Box({ delay, x, y }) {
 export default function Wave() {
   return (
     <Container>
-      <Canvas camera={[30, 30, 30]}>
+      <Canvas camera={{ position: [10, 10, 10] }}>
         <ambientLight intensity={0.5} />
         <spotLight
           intensity={1}
