@@ -1,7 +1,5 @@
 // inspired by https://dribbble.com/shots/6391796-Jellyfish-cuboids
 
-import * as THREE from "three"
-import { render } from "react-dom"
 import React, { useRef } from "react"
 import { useSpring, a } from "react-spring/three"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
@@ -23,25 +21,34 @@ const Controls = props => {
   return <orbitControls ref={ref} args={[camera, gl.domElement]} {...props} />
 }
 
-function createDistance(n) {
-  return (n - 5) * 1.1
-}
-
 const wave = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 const matrix = wave.map(a => wave.map(n => n + a))
 
 function Box({ delay, x, y }) {
+  function createDistance(n) {
+    return (n - wave.length / 2) * 2.1
+  }
+
+  const squareWidth = 2
+
+  const initialHeight = 1
+  const heightDistance = 2.5
+
   const { position } = useSpring({
     from: {
-      position: [createDistance(x), -5, createDistance(y)],
+      position: [createDistance(x), initialHeight, createDistance(y)],
     },
     to: async next => {
       while (1) {
         await next({
-          position: [createDistance(x), -2.5, createDistance(y)],
+          position: [
+            createDistance(x),
+            initialHeight - heightDistance,
+            createDistance(y),
+          ],
         })
         await next({
-          position: [createDistance(x), -5, createDistance(y)],
+          position: [createDistance(x), initialHeight, createDistance(y)],
         })
       }
     },
@@ -54,9 +61,9 @@ function Box({ delay, x, y }) {
   })
 
   return (
-    <a.mesh position={position} scale={[1, 0.2, 1]}>
+    <a.mesh position={position} scale={[squareWidth, 0.2, squareWidth]}>
       <boxBufferGeometry attach="geometry" />
-      <meshToonMaterial color="#999" attach="material" />
+      <meshPhongMaterial color="#fff" attach="material" />
     </a.mesh>
   )
 }
@@ -64,7 +71,7 @@ function Box({ delay, x, y }) {
 export default function Wave() {
   return (
     <Container>
-      <Canvas camera={{ position: [0, 0, 25] }}>
+      <Canvas camera={[30, 30, 30]}>
         <ambientLight intensity={0.5} />
         <spotLight
           intensity={1}
