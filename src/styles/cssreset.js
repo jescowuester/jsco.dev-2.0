@@ -177,7 +177,7 @@ export const preflight = css`
     padding: 0;
   }
   html {
-    font-family: ${theme.fonts.body};
+    font-family: ${p => p.theme.fonts.body};
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
@@ -228,7 +228,7 @@ export const preflight = css`
   code,
   kbd,
   samp {
-    font-family: ${theme.fonts.mono};
+    font-family: ${p => p.theme.fonts.mono};
   }
   img,
   svg,
